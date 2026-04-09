@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>BoviScan — Configura tu rancho</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root {
+    --gold:#EAB338; --gold-light:#FDF3D9; --gold-dark:#C89520;
+    --bg:#F2F4F6; --card:#FFFFFF;
+    --text:#1A1A1A; --text-secondary:#6B7280; --text-muted:#9CA3AF;
+    --border:#E5E7EB; --green:#22C55E; --green-light:#DCFCE7;
+    --red:#EF4444; --blue:#3B82F6; --blue-light:#EFF6FF;
+  }
+  body { background:#E0E2E5; display:flex; align-items:center; justify-content:center; min-height:100dvh; font-family:'Inter',sans-serif; }
+  .phone {
+    width:390px; min-height:844px; background:var(--bg); border-radius:48px; overflow:hidden;
+    display:flex; flex-direction:column;
+    box-shadow:0 30px 80px rgba(0,0,0,0.2),0 0 0 8px #1C1C1C,0 0 0 10px #2A2A2A;
+  }
+  .status-bar { background:#1A1A1A; padding:14px 24px 0; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+  .status-time { font-size:15px; font-weight:700; color:rgba(255,255,255,0.8); }
+  .status-icons { display:flex; gap:4px; font-size:13px; color:rgba(255,255,255,0.6); }
+
+  /* PROGRESS HERO */
+  .progress-hero {
+    background:linear-gradient(160deg, #1A1A1A 0%, #2D2D2D 100%);
+    padding:20px 20px 24px; flex-shrink:0;
+  }
+  .progress-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .progress-step-label { font-size:12px; font-weight:700; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.08em; }
+  .progress-skip { font-size:12px; font-weight:600; color:rgba(255,255,255,0.3); background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; }
+  .progress-title { font-size:20px; font-weight:800; color:white; margin-bottom:4px; }
+  .progress-sub { font-size:13px; color:rgba(255,255,255,0.45); margin-bottom:16px; }
+  .progress-bar { height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--gold); border-radius:2px; transition:width 0.3s; }
+
+  .scroll-area { flex:1; overflow-y:auto; padding:20px 16px 40px; display:flex; flex-direction:column; gap:14px; -ms-overflow-style:none; scrollbar-width:none; }
+  .scroll-area::-webkit-scrollbar { display:none; }
+  .section-label { font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.09em; }
+  .card { background:var(--card); border-radius:20px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.07); display:flex; flex-direction:column; gap:14px; }
+  .card-title { font-size:14px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:8px; margin-bottom:-4px; }
+  .field { display:flex; flex-direction:column; gap:6px; }
+  .field-label { font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.07em; display:flex; align-items:center; gap:5px; }
+  .required-dot { width:5px; height:5px; background:var(--red); border-radius:50%; display:inline-block; }
+  .optional-tag { font-size:9px; font-weight:600; color:var(--text-muted); background:var(--bg); padding:1px 6px; border-radius:8px; border:1px solid var(--border); text-transform:uppercase; }
+  .field-input { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:12px; padding:11px 14px; font-size:14px; font-family:'Inter',sans-serif; color:var(--text); outline:none; transition:border-color 0.15s; }
+  .field-input:focus { border-color:var(--gold); background:white; }
+  .field-input::placeholder { color:var(--text-muted); }
+  .field-select { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:12px; padding:11px 14px; font-size:14px; font-family:'Inter',sans-serif; color:var(--text); outline:none; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; }
+  .field-hint { font-size:11px; color:var(--text-muted); line-height:1.4; }
+
+  /* UPP CARD especial */
+  .upp-card {
+    background:var(--blue-light); border-radius:16px; padding:14px 16px;
+    border:1.5px solid rgba(59,130,246,0.2);
+  }
+  .upp-card-title { font-size:13px; font-weight:800; color:var(--blue); margin-bottom:4px; }
+  .upp-card-desc { font-size:11px; color:#1E40AF; line-height:1.5; margin-bottom:10px; }
+  .upp-input-row { display:flex; gap:8px; align-items:center; }
+  .upp-input { flex:1; background:white; border:1.5px solid rgba(59,130,246,0.3); border-radius:12px; padding:10px 14px; font-size:14px; font-family:'Inter',sans-serif; color:var(--text); outline:none; font-weight:600; letter-spacing:0.05em; }
+  .upp-input:focus { border-color:var(--blue); }
+  .upp-verify-btn { background:var(--blue); border:none; border-radius:12px; padding:10px 14px; font-size:12px; font-weight:800; color:white; cursor:pointer; font-family:'Inter',sans-serif; white-space:nowrap; }
+  .upp-format-hint { font-size:10px; color:#1E40AF; margin-top:6px; }
+
+  /* Tipo de producción toggle */
+  .prod-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .prod-btn {
+    background:var(--bg); border:2px solid var(--border); border-radius:14px;
+    padding:14px 10px; cursor:pointer; font-family:'Inter',sans-serif;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    transition:all 0.15s;
+  }
+  .prod-btn.selected { background:var(--gold-light); border-color:var(--gold); }
+  .prod-btn-icon { font-size:24px; }
+  .prod-btn-label { font-size:12px; font-weight:700; color:var(--text-secondary); }
+  .prod-btn.selected .prod-btn-label { color:var(--gold-dark); }
+
+  /* Usuarios del rancho */
+  .user-row {
+    display:flex; align-items:center; gap:10px;
+    background:var(--bg); border-radius:12px; padding:10px 12px;
+  }
+  .user-avatar {
+    width:36px; height:36px; border-radius:50%; background:var(--gold-light);
+    border:2px solid var(--gold); display:flex; align-items:center; justify-content:center;
+    font-size:16px; flex-shrink:0;
+  }
+  .user-info { flex:1; }
+  .user-name { font-size:13px; font-weight:700; color:var(--text); }
+  .user-role { font-size:11px; color:var(--text-secondary); }
+  .user-badge { font-size:9px; font-weight:800; color:var(--gold-dark); background:var(--gold-light); padding:2px 8px; border-radius:10px; border:1px solid rgba(234,179,56,0.3); }
+  .add-user-btn {
+    width:100%; background:none; border:1.5px dashed var(--border); border-radius:12px;
+    padding:12px; display:flex; align-items:center; justify-content:center; gap:8px;
+    font-family:'Inter',sans-serif; font-size:13px; font-weight:600; color:var(--text-secondary);
+    cursor:pointer; transition:border-color 0.15s;
+  }
+  .add-user-btn:hover { border-color:var(--gold); color:var(--gold-dark); }
+
+  /* Botones */
+  .btn-gold { width:100%; background:var(--gold); border:none; cursor:pointer; border-radius:16px; padding:16px 20px; font-family:'Inter',sans-serif; font-size:15px; font-weight:800; color:#1A1100; box-shadow:0 4px 16px rgba(234,179,56,0.4); transition:transform 0.12s; }
+  .btn-gold:active { transform:scale(0.97); }
+  .btn-outline { width:100%; background:none; border:1.5px solid var(--border); cursor:pointer; border-radius:16px; padding:14px 20px; font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:var(--text-secondary); transition:all 0.12s; margin-top:-4px; }
+
+  @media (max-width:420px) {
+    body { background:var(--bg); align-items:flex-start; }
+    .phone { width:100%; min-height:100dvh; border-radius:0; box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons"><span>▲</span><span>⊙</span><span>▮</span></div>
+  </div>
+
+  <div class="progress-hero">
+    <div class="progress-header">
+      <span class="progress-step-label">Configuración · Paso 1 de 3</span>
+      <button class="progress-skip" onclick="location.href='01_pantalla_inicio.html'">Omitir por ahora</button>
+    </div>
+    <div class="progress-title">Configura tu rancho</div>
+    <div class="progress-sub">Esta información te identifica ante el sistema SINIIGA</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:33%"></div></div>
+  </div>
+
+  <div class="scroll-area">
+
+    <!-- DATOS BÁSICOS DEL RANCHO -->
+    <div class="section-label">Datos del rancho</div>
+    <div class="card">
+      <div class="card-title">🏠 Información general</div>
+
+      <div class="field">
+        <div class="field-label">Nombre del rancho <span class="required-dot"></span></div>
+        <input class="field-input" type="text" placeholder="Ej: Rancho El Encino, Ganadería Pérez..."/>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Propietario / Titular <span class="required-dot"></span></div>
+        <input class="field-input" type="text" placeholder="Nombre completo del titular UPP"/>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Estado <span class="required-dot"></span></div>
+        <select class="field-select">
+          <option value="">Seleccionar estado...</option>
+          <option>Jalisco</option><option>Chihuahua</option><option>Sonora</option>
+          <option>Coahuila</option><option>Veracruz</option><option>Tamaulipas</option>
+          <option>Sinaloa</option><option>Durango</option><option>Zacatecas</option>
+          <option>Michoacán</option><option>Guerrero</option><option>Oaxaca</option>
+          <option selected>Jalisco</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Municipio <span class="required-dot"></span></div>
+        <input class="field-input" type="text" placeholder="Municipio donde se ubica el rancho"/>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Superficie <span class="optional-tag">Opcional</span></div>
+        <div style="position:relative;">
+          <input class="field-input" type="number" placeholder="0" style="padding-right:50px;"/>
+          <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:var(--text-muted);">ha</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLAVE UPP — SINIIGA -->
+    <div class="section-label">Registro SINIIGA / PGN</div>
+    <div class="card">
+      <div class="card-title">🏛 Clave UPP oficial</div>
+      <div class="upp-card">
+        <div class="upp-card-title">¿Tienes clave UPP del PGN?</div>
+        <div class="upp-card-desc">La Clave de Unidad de Producción Pecuaria (UPP) es tu registro oficial ante el Padrón Ganadero Nacional. Es obligatoria para solicitar aretes SINIIGA y para vender ganado con identificación oficial.</div>
+        <div class="upp-input-row">
+          <input class="upp-input" type="text" placeholder="Ej: 14-067-0023-001"/>
+          <button class="upp-verify-btn">Verificar</button>
+        </div>
+        <div class="upp-format-hint">Formato: [Estado]-[Municipio]-[Consecutivo]-[Homoclave] · Si no tienes, acude a tu VAS o CSI más cercana.</div>
+      </div>
+      <div class="field">
+        <div class="field-label">Patente de fierro <span class="optional-tag">Opcional</span></div>
+        <input class="field-input" type="text" placeholder="Marca o fierro registrado del rancho"/>
+        <div class="field-hint">La patente de fierro es requerida para el registro en el PGN (NOM-001-SAG/GAN-2015).</div>
+      </div>
+    </div>
+
+    <!-- TIPO DE PRODUCCIÓN -->
+    <div class="section-label">Sistema de producción</div>
+    <div class="card">
+      <div class="card-title">🐄 ¿A qué se dedica tu rancho?</div>
+      <div class="prod-grid">
+        <button class="prod-btn selected" onclick="toggleProd(this)">
+          <span class="prod-btn-icon">🐄</span>
+          <span class="prod-btn-label">Vaca-cría</span>
+        </button>
+        <button class="prod-btn" onclick="toggleProd(this)">
+          <span class="prod-btn-icon">🥩</span>
+          <span class="prod-btn-label">Engorda</span>
+        </button>
+        <button class="prod-btn" onclick="toggleProd(this)">
+          <span class="prod-btn-icon">🍼</span>
+          <span class="prod-btn-label">Doble propósito</span>
+        </button>
+        <button class="prod-btn" onclick="toggleProd(this)">
+          <span class="prod-btn-icon">🧬</span>
+          <span class="prod-btn-label">Pie de cría</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- USUARIOS DEL RANCHO -->
+    <div class="section-label">Usuarios del rancho <span style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:none;letter-spacing:0;">· Plan Pro: hasta 5</span></div>
+    <div class="card">
+      <div class="card-title">👥 Quién tiene acceso</div>
+
+      <div class="user-row">
+        <div class="user-avatar">👤</div>
+        <div class="user-info">
+          <div class="user-name">Tú (propietario)</div>
+          <div class="user-role">Acceso total · Administrador</div>
+        </div>
+        <span class="user-badge">TITULAR</span>
+      </div>
+
+      <button class="add-user-btn" onclick="alert('Invitar usuario · Disponible en Plan Pro')">
+        <span>+</span> Invitar capataz o empleado
+      </button>
+
+      <div class="field-hint" style="color:var(--text-muted);font-size:11px;">Los usuarios adicionales requieren Plan Pro. Pueden consultar y registrar pesajes pero no pueden dar de baja animales ni cambiar configuración.</div>
+    </div>
+
+    <!-- RECORDATORIO ANUAL PGN -->
+    <div style="background:var(--green-light);border-radius:14px;padding:12px 14px;border:1px solid rgba(34,197,94,0.2);display:flex;align-items:flex-start;gap:10px;">
+      <span style="font-size:18px;flex-shrink:0;">🔔</span>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:#166534;margin-bottom:3px;">Actualización anual PGN obligatoria</div>
+        <div style="font-size:11px;color:#166534;line-height:1.5;">BoviScan te recordará cada año actualizar tu clave UPP en tu Ventanilla Autorizada SINIIGA, como exige la NOM-001-SAG/GAN-2015. Sin actualización tu clave queda suspendida.</div>
+      </div>
+    </div>
+
+    <!-- BOTONES -->
+    <button class="btn-gold" onclick="location.href='01_pantalla_inicio.html'">
+      Guardar y entrar a mi rancho →
+    </button>
+    <button class="btn-outline" onclick="location.href='01_pantalla_inicio.html'">
+      Completar después
+    </button>
+
+  </div>
+</div>
+<script>
+function toggleProd(el) {
+  // Toggle selección múltiple
+  el.classList.toggle('selected');
+}
+</script>
+</body>
+</html>
