@@ -375,7 +375,7 @@
     <div class="card">
       <div class="card-title">
         <span class="material-symbols-outlined">🪪</span>
-        IDs del animal
+        Identificación del animal
       </div>
 
       <!-- SINIIGA -->
@@ -390,21 +390,21 @@
         </div>
         <div class="field-hint">
           <span class="material-symbols-outlined" style="color:var(--blue);">ℹ</span>
-          Obligatorio para vender o transferir. Una vez guardado no se puede modificar. Debe ser único en todo el sistema.
+          Obligatorio para vender o transferir. Formato: MX 00 [clave estado INEGI] [8 dígitos]. Ej: MX 00 14 00012345. Inmutable una vez guardado (NOM-001-SAG/GAN-2015).
         </div>
       </div>
 
       <!-- FOLIO RANCHO AUTO -->
       <div class="field">
         <div class="field-label">
-          Folio del rancho
+          Número de arete interno
           <span class="optional-tag">Auto-asignado</span>
         </div>
         <div class="folio-auto">
           <span class="material-symbols-outlined">#</span>
           <div class="folio-auto-text">
-            <div class="folio-auto-label">Siguiente folio disponible</div>
-            <div class="folio-auto-val">#0451</div>
+            <div class="folio-auto-label">Siguiente número disponible</div>
+            <div class="folio-auto-val">#A-0451</div>
           </div>
           <button class="folio-edit-btn">Cambiar</button>
         </div>
@@ -508,26 +508,35 @@
     <div class="card">
       <div class="card-title">
         <span class="material-symbols-outlined">🌿</span>
-        Padres
+        Semental y Vaca madre
       </div>
 
       <div class="field">
-        <div class="field-label">Padre (Semental)</div>
+        <div class="field-label">Semental</div>
         <div class="parent-row">
           <div class="parent-avatar-placeholder">
             <span class="material-symbols-outlined">+</span>
           </div>
-          <input class="parent-input" type="text" placeholder="Folio o SINIIGA del padre..."/>
+          <input class="parent-input" type="text" placeholder="Arete o SINIIGA del semental..."/>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+          <span style="font-size:11px;font-weight:600;color:var(--text-secondary);">Paternidad:</span>
+          <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text);cursor:pointer;">
+            <input type="radio" name="pat" value="confirmada" checked style="accent-color:var(--gold);"/> Confirmada
+          </label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text);cursor:pointer;">
+            <input type="radio" name="pat" value="estimada" style="accent-color:var(--gold);"/> Estimada (monta natural)
+          </label>
         </div>
       </div>
 
       <div class="field">
-        <div class="field-label">Madre</div>
+        <div class="field-label">Vaca madre</div>
         <div class="parent-row">
           <div class="parent-avatar-placeholder">
             <span class="material-symbols-outlined">+</span>
           </div>
-          <input class="parent-input" type="text" placeholder="Folio o SINIIGA de la madre..."/>
+          <input class="parent-input" type="text" placeholder="Arete o SINIIGA de la vaca madre..."/>
         </div>
       </div>
     </div>
@@ -543,7 +552,7 @@
 
       <button class="btn-scan-first" onclick="location.href='02_resultado_escaneo.html'">
         <span class="material-symbols-outlined">⬡</span>
-        <span class="btn-scan-first-label">Escanear con LiDAR ahora</span>
+        <span class="btn-scan-first-label">Escanear con LiDAR</span>
       </button>
 
       <div style="display:flex;align-items:center;gap:10px;">
@@ -554,7 +563,7 @@
 
       <div class="field">
         <div class="field-label">
-          Ingresar peso manual
+          Peso en báscula o estimación
           <span class="optional-tag">Opcional</span>
         </div>
         <div style="position:relative;">
@@ -567,7 +576,7 @@
     <!-- BOTONES -->
     <button class="btn-save">
       <span class="material-symbols-outlined">✓</span>
-      <span class="btn-save-label">Registrar animal</span>
+      <span class="btn-save-label">Crear expediente del animal</span>
     </button>
 
     <button class="btn-cancel" onclick="location.href='04_lista_hato.html'">

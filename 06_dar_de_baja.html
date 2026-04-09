@@ -294,6 +294,30 @@
 
   a.btn-link { display:block; text-decoration:none; }
   a.btn-link button { pointer-events:none; }
+
+  /* AVISO SINIIGA */
+  .siniiga-notice {
+    background: #EFF6FF; border-radius: 14px; padding: 12px 14px;
+    border: 1.5px solid #BFDBFE;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .siniiga-notice-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .siniiga-notice-text { font-size: 12px; color: #1E40AF; line-height: 1.5; }
+  .siniiga-notice-text strong { font-weight: 800; }
+
+  /* BAJA EN LOTE */
+  .lote-toggle {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card); border-radius: 14px; padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    cursor: pointer;
+  }
+  .lote-toggle-icon { font-size: 20px; }
+  .lote-toggle-text { flex: 1; }
+  .lote-toggle-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .lote-toggle-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+  .lote-badge { font-size: 10px; font-weight: 800; color: var(--gold-dark); background: var(--gold-light); padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(234,179,56,0.3); }
 </style>
 </head>
 <body>
@@ -323,6 +347,16 @@
 
   <div class="scroll-area">
 
+      <a href="#" class="lote-toggle" style="display:flex;text-decoration:none;margin-bottom:0;" onclick="location.href='06b_baja_lote.html'">
+        <span class="lote-toggle-icon">📋</span>
+        <div class="lote-toggle-text">
+          <div class="lote-toggle-title">Dar de baja en lote</div>
+          <div class="lote-toggle-sub">Seleccionar múltiples animales</div>
+        </div>
+        <span class="lote-badge">LOTE</span>
+      </a>
+
+
     <!-- RESUMEN DEL ANIMAL -->
     <div class="animal-summary">
       <div class="animal-avatar">🐄</div>
@@ -331,7 +365,7 @@
         <div class="animal-breed">Holstein · Hembra · 4 años</div>
         <div class="animal-ids">
           <span class="id-pill">SINIIGA: MX 484 1024</span>
-          <span class="id-pill">Folio: #1024</span>
+          <span class="id-pill">Expediente: #1024</span>
         </div>
       </div>
     </div>
@@ -340,7 +374,7 @@
     <div class="warning-box">
       <span class="material-symbols-outlined">⚠</span>
       <div class="warning-text">
-        <strong>Esta acción es permanente.</strong> El animal se archivará con todo su historial. Se generará un folio digital transferible con el historial completo de pesajes, salud y genealogía.
+        <strong>Esta acción es permanente.</strong> El animal se archivará con todo su historial. Se generará un expediente digital transferible con el historial completo de pesajes, salud y genealogía.
       </div>
     </div>
 
@@ -397,16 +431,26 @@
       </div>
       <div>
         <div class="field-label">Peso al momento de venta</div>
-        <input class="field-input" type="text" placeholder="kg · usa el escáner o ingresa manual"/>
-      </div>
+        <input class="field-input" type="text" placeholder="0" style="padding-right:40px;"/>
+              <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:var(--text-muted);">kg</span>
+      
+              <select style="width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);outline:none;appearance:none;margin-top:6px;"><option>Fuente: LiDAR BoviScan</option><option selected>Fuente: Báscula certificada</option><option>Fuente: Báscula de campo</option><option>Fuente: Estimación visual</option></select></div>
       <div>
         <div class="field-label">Notas adicionales</div>
         <textarea class="field-textarea" placeholder="Condición del animal, acuerdos, observaciones..."></textarea>
       </div>
     </div>
 
-    <!-- FOLIO TRANSFERIBLE -->
-    <div class="section-label">Folio digital transferible</div>
+    <!-- AVISO SINIIGA -->
+    <div class="siniiga-notice">
+      <div class="siniiga-notice-icon">⚠</div>
+      <div class="siniiga-notice-text">
+        <strong>Obligación SINIIGA:</strong> Al dar de baja por venta o sacrificio, debes entregar los aretes físicos a tu Ventanilla Autorizada SINIIGA (VAS/CSI) más cercana para registrar la baja en el Banco Central de Información.
+      </div>
+    </div>
+
+    <!-- EXPEDIENTE TRANSFERIBLE -->
+    <div class="section-label">Expediente digital transferible</div>
 
     <div class="folio-card">
       <div class="folio-header">
@@ -423,7 +467,7 @@
         <div class="folio-animal-avatar">🐄</div>
         <div>
           <div class="folio-animal-name">Bessie</div>
-          <div class="folio-animal-id">SINIIGA: MX 484 1024 · Folio rancho: #1024</div>
+          <div class="folio-animal-id">SINIIGA: MX 484 1024 · Arete interno: #1024</div>
         </div>
       </div>
 

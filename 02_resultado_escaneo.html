@@ -409,6 +409,34 @@
 
   a.btn-link { display:block; text-decoration:none; }
   a.btn-link button { pointer-events:none; }
+
+  /* PESO CONFIRM CARD */
+  .peso-confirm-card {
+    background: var(--card); border-radius: 18px; padding: 16px;
+    border: 1.5px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    margin-bottom: 2px;
+  }
+  .peso-confirm-header { margin-bottom: 12px; }
+  .peso-confirm-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.07em; }
+  .peso-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .peso-option {
+    background: var(--bg); border-radius: 12px; padding: 12px 10px;
+    border: 2px solid var(--border); cursor: pointer; transition: all 0.15s;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .peso-option.selected { background: var(--gold-light); border-color: var(--gold); }
+  .peso-option-tag { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .peso-option.selected .peso-option-tag { color: var(--gold-dark); }
+  .peso-option-val { font-size: 20px; font-weight: 800; color: var(--text); }
+  .peso-option.selected .peso-option-val { color: var(--text); }
+  .peso-option-sub { font-size: 10px; color: var(--text-muted); }
+  .peso-option-input-wrap { display: flex; align-items: center; gap: 4px; }
+  .peso-manual-input { width: 70px; background: white; border: 1.5px solid var(--gold); border-radius: 8px; padding: 4px 8px; font-size: 16px; font-weight: 800; font-family: 'Inter', sans-serif; outline: none; text-align: center; }
+  .peso-manual-unit { font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+  .fuente-row { display: flex; align-items: center; gap: 8px; }
+  .fuente-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+  .fuente-select { flex: 1; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 7px 10px; font-size: 12px; font-family: 'Inter', sans-serif; color: var(--text); outline: none; appearance: none; }
 </style>
 </head>
 <body>
@@ -565,7 +593,7 @@
         <div class="metric-label">Altura al lomo</div>
       </div>
       <div class="metric-card">
-        <div class="material-symbols-outlined metric-icon">radio_button_unchecked</div>
+        <div class="material-symbols-outlined metric-icon">⬭</div>
         <div class="metric-value">1.96 m</div>
         <div class="metric-label">Perímetro</div>
       </div>
@@ -607,11 +635,45 @@
 
     <!-- ACCIONES -->
     <div class="action-section">
+
+      <!-- PESO ESTIMADO + OPCIÓN MANUAL -->
+      <div class="peso-confirm-card">
+        <div class="peso-confirm-header">
+          <span class="peso-confirm-label">¿Confirmar peso a registrar?</span>
+        </div>
+        <div class="peso-options">
+          <div class="peso-option selected" onclick="selectPeso(this,'lidar')">
+            <div class="peso-option-tag">LiDAR</div>
+            <div class="peso-option-val">487 kg</div>
+            <div class="peso-option-sub">Estimado por BoviScan</div>
+          </div>
+          <div class="peso-option" onclick="selectPeso(this,'manual')">
+            <div class="peso-option-tag">Manual</div>
+            <div class="peso-option-input-wrap" id="manual-input-wrap" style="display:none;">
+              <input id="manual-kg" type="number" placeholder="0" class="peso-manual-input"/>
+              <span class="peso-manual-unit">kg</span>
+            </div>
+            <div class="peso-option-val" id="manual-placeholder">Ingresar</div>
+            <div class="peso-option-sub">Báscula · Estimación</div>
+          </div>
+        </div>
+        <div class="fuente-row">
+          <span class="fuente-label">Fuente:</span>
+          <select class="fuente-select" id="fuente-select">
+            <option value="lidar">LiDAR BoviScan</option>
+            <option value="bascula">Báscula certificada</option>
+            <option value="bascula_campo">Báscula de campo</option>
+            <option value="estimacion">Estimación visual</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+      </div>
+
       <button class="btn-primary" onclick="location.href='05_perfil_animal.html'">
         <span class="material-symbols-outlined">+</span>
         <div>
-          <div class="btn-primary-label">Registrar este peso</div>
-          <div class="btn-primary-sub">Asociar a un animal en Mi Rancho</div>
+          <div class="btn-primary-label">Registrar en expediente</div>
+          <div class="btn-primary-sub">Guardar en bitácora del animal</div>
         </div>
       </button>
 
@@ -620,7 +682,7 @@
           <span class="material-symbols-outlined">↑</span>
           <span class="btn-small-label">Compartir</span>
         </button>
-        <button class="btn-small">
+        <button class="btn-small" onclick="location.href='02_resultado_escaneo.html'">
           <span class="material-symbols-outlined">⬡</span>
           <span class="btn-small-label">Nuevo escaneo</span>
         </button>
@@ -654,5 +716,25 @@
   </div>
 
 </div>
+
+<script>
+function selectPeso(el, tipo) {
+  document.querySelectorAll('.peso-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  var fuenteSelect = document.getElementById('fuente-select');
+  var manualWrap = document.getElementById('manual-input-wrap');
+  var manualPlaceholder = document.getElementById('manual-placeholder');
+  if (tipo === 'lidar') {
+    fuenteSelect.value = 'lidar';
+    manualWrap.style.display = 'none';
+    manualPlaceholder.style.display = 'block';
+  } else {
+    fuenteSelect.value = 'bascula';
+    manualWrap.style.display = 'flex';
+    manualPlaceholder.style.display = 'none';
+    document.getElementById('manual-kg').focus();
+  }
+}
+</script>
 </body>
 </html>
